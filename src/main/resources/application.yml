@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: pos
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:3242/fastapi
+    username: springdb
+    password: ITE2@2024
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+file_storage:
+  image_location: "/filestorage/images/"
+  client_path: "/images/**"
+springdoc:
+  swagger-ui:
+    path: /api
+
+# This is for the access token
+ACCESS_TOKEN_PRIVATE_KEY_PATH: access-refresh-token-keys/access-token-private.key
+ACCESS_TOKEN_PUBLIC_KEY_PATH: access-refresh-token-keys/access-token-public.key
+# This is for the refresh token
+REFRESH_TOKEN_PRIVATE_KEY_PATH: access-refresh-token-keys/refresh-token-private.key
+REFRESH_TOKEN_PUBLIC_KEY_PATH: access-refresh-token-keys/refresh-token-public.key
+
