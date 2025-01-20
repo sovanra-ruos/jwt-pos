@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/inventory")
@@ -23,6 +25,12 @@ public class InventoryController {
         CustomPage<InventoryResponse> postResponseCustomPage = inventoryService.getInventories(page, size);
 
         return ResponseEntity.ok(postResponseCustomPage);
+    }
+
+    @GetMapping("/{uuid}")
+    @Operation(summary = "Get inventory by uuid")
+    public ResponseEntity<InventoryResponse> getInventoryByUuid(@PathVariable String uuid) {
+        return ResponseEntity.ok(inventoryService.getInventory(uuid));
     }
 
     @PostMapping
@@ -62,5 +70,11 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.enableInventory(uuid));
     }
 
+
+    @GetMapping("/category/{categoryName}")
+    @Operation(summary = "Get all inventory by category")
+    public ResponseEntity<List<InventoryResponse>> getInventoryByCategory(@PathVariable String categoryName) {
+        return ResponseEntity.ok(inventoryService.getInventoriesByCategory(categoryName));
+    }
 
 }

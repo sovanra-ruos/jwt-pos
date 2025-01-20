@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -35,7 +36,14 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public InventoryResponse getInventory(String uuid) {
-        return null;
+
+        Inventory inventory = inventoryRepository.findByUuid(uuid);
+
+        if(inventory == null){
+            throw new RuntimeException("Inventory with uuid: " + uuid + " not found");
+        }
+
+        return inventoryMapper.toInventoryResponse(inventory);
     }
 
     @Override
@@ -129,6 +137,15 @@ public class InventoryServiceImpl implements InventoryService {
 
         return inventoryMapper.toInventoryResponse(inventory);
     }
+
+    @Override
+    public List<InventoryResponse> getInventoriesByCategory(String categoryName) {
+
+        List<Inventory> inventories = inventoryRepository.findInventoryByProduct_Category_Name(categoryName);
+
+        return inventories.stream().map(inventoryMapper::toInventoryResponse).toList();
+    }
+
 
     public CustomPage<InventoryResponse> customPage(Page<InventoryResponse> page){
 

@@ -4,6 +4,8 @@ import co.itc.pos.features.inventory.dto.InventoryRequest;
 import co.itc.pos.features.inventory.dto.InventoryResponse;
 import co.itc.pos.utils.CustomPage;
 
+import java.util.List;
+
 public interface InventoryService {
 
     CustomPage<InventoryResponse> getInventories(int page, int size);
@@ -21,4 +23,7 @@ public interface InventoryService {
     InventoryResponse disableInventory(String uuid);
 
     InventoryResponse enableInventory(String uuid);
+
+    List<InventoryResponse> getInventoriesByCategory(String categoryName);
+
 }

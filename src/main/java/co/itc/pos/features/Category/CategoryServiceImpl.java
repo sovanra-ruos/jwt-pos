@@ -52,6 +52,8 @@ public class CategoryServiceImpl implements CategoryService{
 
         category.setUuid(UUID.randomUUID().toString());
 
+        category.setImage(request.image());
+
         categoryRepository.save(category);
 
         return categoryMapper.toCategoryResponse(category);

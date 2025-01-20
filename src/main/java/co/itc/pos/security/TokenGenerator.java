@@ -79,7 +79,6 @@ public class TokenGenerator {
         return AuthResponse.builder()
                 .refreshToken(refreshToken)
                 .accessToken(createAccessToken(authentication))
-                .userId(customUserDetails.getUser().getId())
                 .build();
 
     }

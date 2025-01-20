@@ -17,10 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +50,9 @@ public class FileServiceImpl implements FileService{
     }
 
     private String uploadFile(MultipartFile file) {
+
+        logger.info("File name: {}", file.getOriginalFilename());
+
         String contentType = file.getContentType();
         if (!SUPPORTED_IMAGE_TYPES.contains(contentType)) {
             throw new ResponseStatusException(
@@ -60,26 +60,28 @@ public class FileServiceImpl implements FileService{
                     contentType + " not allowed!!");
         }
         try {
+            logger.info("File Storage Dir: {}", fileStorageDir);
             Path fileStoragePath = Path.of(fileStorageDir);
-            if (!Files.exists(fileStoragePath)) {
-                try {
+            try {
+                if (!Files.exists(fileStoragePath)) {
                     Files.createDirectories(fileStoragePath);
-                } catch (IOException e) {
-                    logger.error("Failed to create directory: {}", fileStoragePath, e);
-                    throw new ResponseStatusException(
-                            HttpStatus.INTERNAL_SERVER_ERROR,
-                            "Could not create directory for file storage");
+                    logger.info("Created directory: {}", fileStoragePath);
+                } else {
+                    logger.info("Directory already exists: {}", fileStoragePath);
                 }
+            } catch (IOException e) {
+                logger.error("Failed to create directory: {}", fileStoragePath, e);
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not create directory", e);
             }
-            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-            Path destination = Paths.get(fileStoragePath.toString(), fileName);
-            Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+            String fileName = Objects.requireNonNull(file.getOriginalFilename());
+            Files.copy(file.getInputStream(),
+                    fileStoragePath.resolve(fileName),
+                    StandardCopyOption.REPLACE_EXISTING);
             return fileName;
-        } catch (IOException e) {
-            logger.error("Failed to store file: {}", file.getOriginalFilename(), e);
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Could not store file " + file.getOriginalFilename());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
         }
     }
 
@@ -88,12 +90,11 @@ public class FileServiceImpl implements FileService{
         String filename = uploadFile(file);
         String fullImageUrl = generateImageUrl(request, filename);
         return FileResponse.builder()
-                .fileName(filename)
-                .fullUrl(fullImageUrl)
-                .size((float) file.getSize() / 1024) // in KB
+                .downloadUrl(generateDownloadImageUrl(request,filename))
                 .fileType(file.getContentType())
-                .downloadUrl(generateDownloadImageUrl(request, filename))
-                .build();
+                .size((float) file.getSize() / 1024) // in KB
+                .fileName(filename)
+                .fullUrl(fullImageUrl).build();
     }
 
     @Override

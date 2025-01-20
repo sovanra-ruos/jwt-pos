@@ -6,6 +6,7 @@ import co.itc.pos.utils.CustomPage;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +19,7 @@ public class CategoryController {
 
     @GetMapping
     @Operation(summary = "Get all categories")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<CustomPage<CategoryResponse>> getAllProducts(@RequestParam(defaultValue = "0") int page,
                                                                        @RequestParam(defaultValue = "10") int size){
         CustomPage<CategoryResponse> postResponseCustomPage = categoryService.findAll(page, size);

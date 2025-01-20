@@ -2,7 +2,7 @@ spring:
   application:
     name: pos
   datasource:
-    url: jdbc:postgresql://127.0.0.1:3242/fastapi
+    url: jdbc:postgresql://34.126.183.52:3242/test-jwt
     username: springdb
     password: ITE2@2024
     driver-class-name: org.postgresql.Driver

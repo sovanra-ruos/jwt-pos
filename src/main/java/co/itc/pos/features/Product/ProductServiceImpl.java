@@ -7,7 +7,9 @@ import co.itc.pos.features.Product.dto.ProductRequest;
 import co.itc.pos.features.Product.dto.ProductResponse;
 import co.itc.pos.mapper.ProductMapper;
 import co.itc.pos.utils.CustomPage;
+import co.itc.pos.utils.RandomUUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService{
@@ -23,6 +26,7 @@ public class ProductServiceImpl implements ProductService{
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final CategoryRepository categoryRepository;
+    private final RandomUUID randomUUID;
 
 
     @Override
@@ -37,13 +41,15 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public ProductResponse createProduct(ProductRequest productRequest) {
 
+        log.info("Creating product: {}", productRequest);
+
         Product product = productMapper.toProduct(productRequest);
 
         Category category = categoryRepository.findByName(productRequest.categoryName());
 
         product.setCategory(category);
 
-        product.setUuid(UUID.randomUUID().toString());
+        product.setUuid(randomUUID.generateProductId());
 
         productRepository.save(product);
 
