@@ -4,6 +4,7 @@ import co.itc.pos.features.Category.dto.CategoryRequest;
 import co.itc.pos.features.Category.dto.CategoryResponse;
 import co.itc.pos.utils.CustomPage;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +35,7 @@ public class CategoryController {
 
     @PostMapping
     @Operation(summary = "Create a new category")
-    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest categoryRequest){
+    public ResponseEntity<CategoryResponse> createCategory(@Valid @RequestBody CategoryRequest categoryRequest){
         return ResponseEntity.ok(categoryService.createCategory(categoryRequest));
     }
 

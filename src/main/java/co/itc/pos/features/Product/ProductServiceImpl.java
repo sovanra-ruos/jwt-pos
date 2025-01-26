@@ -8,6 +8,7 @@ import co.itc.pos.features.Product.dto.ProductResponse;
 import co.itc.pos.mapper.ProductMapper;
 import co.itc.pos.utils.CustomPage;
 import co.itc.pos.utils.RandomUUID;
+import co.itc.pos.utils.Validate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ public class ProductServiceImpl implements ProductService{
     private final ProductMapper productMapper;
     private final CategoryRepository categoryRepository;
     private final RandomUUID randomUUID;
+    private final Validate validate;
 
 
     @Override
@@ -42,6 +44,8 @@ public class ProductServiceImpl implements ProductService{
     public ProductResponse createProduct(ProductRequest productRequest) {
 
         log.info("Creating product: {}", productRequest);
+
+        validate.validateProduct(productRequest.name());
 
         Product product = productMapper.toProduct(productRequest);
 

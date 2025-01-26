@@ -13,5 +13,6 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     Product findTopByOrderByIdDesc();
 
+    boolean existsByName (String name);
 
 }

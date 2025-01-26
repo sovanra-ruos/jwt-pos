@@ -10,4 +10,6 @@ public interface CategoryRepository extends JpaRepository<Category,Long> {
     Category findByUuid (String uuid);
 
     Category findByName (String name);
+
+    boolean existsByName (String name);
 }

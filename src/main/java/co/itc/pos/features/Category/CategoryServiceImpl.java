@@ -5,7 +5,9 @@ import co.itc.pos.features.Category.dto.CategoryRequest;
 import co.itc.pos.features.Category.dto.CategoryResponse;
 import co.itc.pos.mapper.CategoryMapper;
 import co.itc.pos.utils.CustomPage;
+import co.itc.pos.utils.Validate;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -14,12 +16,14 @@ import org.springframework.stereotype.Service;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService{
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+    private final Validate validate;
 
 
     @Override
@@ -47,6 +51,10 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public CategoryResponse createCategory(CategoryRequest request) {
+
+        log.info("checking the category exist: {}", request.name());
+
+        validate.validateCategory(request.name());
 
         Category category = categoryMapper.toCategory(request);
 
