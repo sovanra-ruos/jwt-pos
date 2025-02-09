@@ -6,6 +6,7 @@ import co.itc.pos.features.Category.CategoryRepository;
 import co.itc.pos.features.Product.dto.ProductRequest;
 import co.itc.pos.features.Product.dto.ProductResponse;
 import co.itc.pos.mapper.ProductMapper;
+import co.itc.pos.security.PageCustom;
 import co.itc.pos.utils.CustomPage;
 import co.itc.pos.utils.RandomUUID;
 import co.itc.pos.utils.Validate;
@@ -31,12 +32,14 @@ public class ProductServiceImpl implements ProductService{
     private final Validate validate;
 
 
+
     @Override
     public CustomPage<ProductResponse> getProducts(int page, int size) {
 
         Page<Product> products = productRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
 
-        return customPage(products.map(productMapper::toProductResponse));
+
+        return PageCustom.customPage(products.map(productMapper::toProductResponse));
 
     }
 

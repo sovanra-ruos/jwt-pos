@@ -107,6 +107,7 @@ public class SecurityConfiguration {
         JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwkSource);
     }
+
     @Bean
     @Primary
     JwtDecoder jwtAccessTokenDecoder(){

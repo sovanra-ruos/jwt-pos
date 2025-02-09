@@ -21,8 +21,10 @@ import java.util.Objects;
 
 @Component
 public class KeyUtils {
+
     @Autowired
     Environment environment;
+
     @Value("${ACCESS_TOKEN_PRIVATE_KEY_PATH}")
     private String accessTokenPrivateKey;
     @Value("${ACCESS_TOKEN_PUBLIC_KEY_PATH}")
@@ -48,10 +50,12 @@ public class KeyUtils {
         }
         return _refreshTokenKeyPair;
     }
+
     private KeyPair getKeyPair(String publicKeyPath , String privateKeyPath ){
         KeyPair keyPair;
         File publicKeyFile = new File(publicKeyPath);
         File privateKeyFile = new File(privateKeyPath);
+
         if (publicKeyFile.exists() && privateKeyFile.exists()){
             try{
                 KeyFactory keyFactory = KeyFactory.getInstance("RSA");

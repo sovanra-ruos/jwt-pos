@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  pos-system:
+    container_name: 'pos-system'
+    #    image: 'pos-system'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - TZ=Asia/Bangkok
+    ports:
+      - '3243:8080'   #follow you port
+    volumes:
+      - '/home/images:/app/filestorage/images'
+  database:
+    container_name: 'database'
+    image: 'postgres:13.1'
+    restart: always
+    environment:
+      POSTGRES_DB: 'test-jwt'
+      POSTGRES_USER: 'springdb'
+      POSTGRES_PASSWORD: 'springdb'
+    ports:
+        - '3242:5432'

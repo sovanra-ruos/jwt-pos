@@ -16,4 +16,5 @@ public class CustomPage<T> {
     private int total;
     private Long totalElements;
     private List<T> results;
+
 }
